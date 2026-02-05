@@ -1,3 +1,7 @@
+const configPath = process.env.FILE;
+const config = await import(configPath);
+const { botConfig, buildStringPing, buildStringMessage } = config;
+
 import path from "node:path";
 import { sleep } from "./helpers.js";
 import { Client, GatewayIntentBits } from "discord.js";
@@ -23,42 +27,15 @@ const client = new Client({
     ],
 });
 
-import dotenv from "dotenv";
-dotenv.config({ path: ".env" });
-const TOKEN = process.env.DISCORD_BOT_TOKEN;
+const TOKEN = botConfig.token;
 
 client.on("clientReady", async () => {
     console.log("discord bot is logged in");
 });
 
-async function doWei(interaction) {
+async function sayString(interaction) {
     await interaction.deferReply();
-    await interaction.editReply(buildWeiStringMessage());
-}
-
-function getWeiPunctuation() {
-    let punctuation = "";
-    let punctuationFloat = Math.random();
-
-    if (punctuationFloat > 0.66) punctuation = "!";
-    else if (punctuationFloat > 0.33) punctuation = "?";
-
-    return punctuation;
-}
-
-function buildWeiStringPing() {
-    const numOfI = Math.floor(Math.random() * 10) + 1;
-    const numOfE = Math.floor(Math.random() * 10) + 1;
-
-    return "w" + "e".repeat(numOfE) + "i".repeat(numOfI) + "?";
-}
-
-function buildWeiStringMessage() {
-    const numOfI = Math.floor(Math.random() * 10) + 1;
-    const numOfE = Math.floor(Math.random() * 10) + 1;
-    const punctuation = getWeiPunctuation();
-
-    return "w" + "e".repeat(numOfE) + "i".repeat(numOfI) + punctuation;
+    await interaction.editReply(buildStringMessage());
 }
 
 client.on("messageCreate", async (message) => {
@@ -67,29 +44,27 @@ client.on("messageCreate", async (message) => {
     const channel = message.channel;
 
     if (message.mentions.has(client.user)) {
-        await message.reply(buildWeiStringPing());
-    } else if (message.content.toLowerCase().includes("wei")) {
-        await channel.send(buildWeiStringMessage());
+        await message.reply(buildStringPing());
+    } else if (message.content.toLowerCase().includes(botConfig.name)) {
+        await channel.send(buildStringMessage());
     }
 });
 
 function randomSound() {
     const fileNum = Math.floor(Math.random() * 5) + 1
-    return `wei${fileNum}.MP3`;
+    return `${botConfig.name}${fileNum}.MP3`;
 }
 
-async function weiLoop(connection, player) {
+async function botLoop(connection, player) {
     await sleep(1000);
     if (Math.random() > 0.98) {
-        console.log("won the 1/50");
-        await playWei(connection, player);
+        await playSound(connection, player);
     } else {
-        console.log("lost the 1/50");
-        weiLoop(connection, player);
+        botLoop(connection, player);
     }
 }
 
-async function playWei(connection, player) {
+async function playSound(connection, player) {
     const soundpath = path.join(__dirname, 'audio', randomSound());
     const resource = createAudioResource(soundpath);
 
@@ -99,17 +74,17 @@ async function playWei(connection, player) {
     player.play(resource);
 
     player.on(AudioPlayerStatus.Idle, async () => {
-        await weiLoop(connection, player);
+        await botLoop(connection, player);
     });
 }
 
-async function handleJoinWei(interaction) {
+async function handleJoin(interaction) {
     const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
         return interaction.reply("join a voice call dumbass");
     }
 
-    await interaction.reply("Wei is arriving.");
+    await interaction.reply(`${botConfig.name} is arriving.`);
 
     const connection = joinVoiceChannel({
         channelId: voiceChannel.id,
@@ -123,17 +98,19 @@ async function handleJoinWei(interaction) {
 
     player.once(AudioPlayerStatus.Playing, () => console.log('Player: Playing'));
     player.once(AudioPlayerStatus.Idle, () => console.log('Player: Idle (finished or failed)'));
+
     // start the loop
-    weiLoop(connection, player);
+    botLoop(connection, player);
 }
 
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
     const { commandName } = interaction;
+    console.log("app id:" + interaction.applicationId);
 
-    if (commandName === "wei") await doWei(interaction);
-    if (commandName === "joincall") await handleJoinWei(interaction);
+    if (commandName === `${botConfig.name}`) await sayString(interaction);
+    if (commandName === `${botConfig.name}join`) await handleJoin(interaction);
 });
 
 client.login(TOKEN);

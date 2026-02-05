@@ -10,6 +10,6 @@
     "sodium-native": "^5.0.10"
   },
   "scripts": {
-      "start": "node bot.js"
+      "start": "node index.js"
   }
 }

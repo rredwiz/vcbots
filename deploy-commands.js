@@ -7,9 +7,9 @@ import {
 import dotenv from "dotenv";
 dotenv.config({ path: ".env" });
 
-const clientId = process.env.DISCORD_BOT_CLIENT_ID;
+const clientId = process.env.WEI_CLIENT_ID;
 const guildId = process.env.DISCORD_BOT_GUILD_ID;
-const token = process.env.DISCORD_BOT_TOKEN;
+const token = process.env.WEI_TOKEN;
 
 // commands go here
 const commands = [
@@ -17,8 +17,8 @@ const commands = [
         .setName("wei")
         .setDescription("wei."),
     new SlashCommandBuilder()
-        .setName("joincall")
-        .setDescription("weeeeiiii."),
+        .setName("weijoin")
+        .setDescription("weiiii!"),
 ].map((command) => command.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(token);
