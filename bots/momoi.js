@@ -2,11 +2,11 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env", quiet: true });
 
 export const botConfig = {
-    name: "mambo",
-    token: process.env.MAMBO_TOKEN,
-    chance: 0.98,
-    msgSlashName: "mambo",
-    voiceSlashName: "mambojoin",
+    name: "momoi",
+    token: process.env.MOMOI_TOKEN,
+    chance: 0.995,
+    msgSlashName: "momoi",
+    voiceSlashName: "momoijoin",
 };
 
 export function getPunctuation() {
@@ -20,17 +20,17 @@ export function getPunctuation() {
 }
 
 export function buildStringPing() {
-    return "mambo" + "?";
+    return "那个" + "?";
 }
 
 export function buildStringMessage() {
     // 1 to 3 mambos randomly
     const numOfMambos = Math.floor(Math.random() * 3) + 1;
     const punctuation = getPunctuation();
-    let mamboString = "mambo";
+    let mamboString = "那个";
 
     for (let i = 1; i < numOfMambos; i++) {
-        mamboString += " mambo"
+        mamboString += " 那个"
     }
 
     return mamboString + punctuation;

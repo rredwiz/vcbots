@@ -4,6 +4,7 @@ dotenv.config({ path: ".env", quiet: true });
 export const botConfig = {
     name: "wei",
     token: process.env.WEI_TOKEN,
+    chance: 0.98,
     msgSlashName: "wei",
     voiceSlashName: "weijoin",
 };

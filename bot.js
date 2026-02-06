@@ -66,7 +66,7 @@ function randomSound() {
 
 async function botLoop(connection, player) {
     await sleep(1000);
-    if (Math.random() > 0.98) {
+    if (Math.random() > botConfig.chance) {
         await playSound(connection, player);
     } else {
         botLoop(connection, player);

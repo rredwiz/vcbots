@@ -1,3 +1,8 @@
+/* 
+    TODO complete the deploy commands
+    Usage: node deploy-commands.js botname
+*/
+
 import {
     REST,
     Routes,
@@ -7,18 +12,21 @@ import {
 import dotenv from "dotenv";
 dotenv.config({ path: ".env", quiet: true });
 
-const clientId = process.env.WEI_CLIENT_ID;
+// TODO
+// const botname = process.argv[2];
+
+const clientId = process.env.MOMOI_CLIENT_ID;
 const guildId = process.env.DISCORD_BOT_GUILD_ID;
-const token = process.env.WEI_TOKEN;
+const token = process.env.MOMOI_TOKEN;
 
 // commands go here
 const commands = [
     new SlashCommandBuilder()
-        .setName("wei")
-        .setDescription("wei."),
+        .setName("momoi")
+        .setDescription("那个."),
     new SlashCommandBuilder()
-        .setName("weijoin")
-        .setDescription("weiiii!"),
+        .setName("momoijoin")
+        .setDescription("那个!!"),
 ].map((command) => command.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(token);
