@@ -79,7 +79,7 @@ async function playSound(connection, player) {
 
     player.removeAllListeners();
 
-    await entersState(connection, VoiceConnectionStatus.Ready, 10_000);
+    // await entersState(connection, VoiceConnectionStatus.Ready, 10_000);
     player.play(resource);
 
     player.on(AudioPlayerStatus.Idle, async () => {
